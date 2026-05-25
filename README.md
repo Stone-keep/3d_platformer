@@ -1,2 +1,2 @@
 # 3d_platformer
-Building simple 3D platformer game to learn Godot
+Learning Godot using this tutorial by Clear Code: https://www.patreon.com/collection/1774617
