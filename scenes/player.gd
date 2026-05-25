@@ -1,13 +1,18 @@
 extends CharacterBody3D
 
-@onready var camera: Camera3D = $CameraController/Camera3D
+@onready var camera: Camera3D = $CameraController/SpringArm3D/Camera3D
+@onready var model: Node3D = $Model
+
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+
+var direction: Vector3
 
 
 func _physics_process(delta: float) -> void:
 	get_input(delta)
 	move_and_slide()
+	animate(delta)
 
 
 func get_input(delta) -> void:
@@ -15,7 +20,7 @@ func get_input(delta) -> void:
 		velocity += get_gravity() * delta
 
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
-	var direction := (camera.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	direction = (camera.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -27,3 +32,6 @@ func get_input(delta) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	
+func animate(delta) -> void:
+	if direction:
+		model.rotation.y = rotate_toward(model.rotation.y, -Vector2(direction.x, direction.z).angle() + PI/2, 6.0 * delta)

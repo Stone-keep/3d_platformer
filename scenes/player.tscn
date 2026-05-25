@@ -5,16 +5,17 @@
 [ext_resource type="PackedScene" uid="uid://dyvhvq01p6ukq" path="res://scenes/camera_controller.tscn" id="3_qhqgy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3vyb7"]
-radius = 0.28466797
+radius = 0.6069336
 height = 2.1000977
 
 [node name="Player" type="CharacterBody3D" unique_id=1302882633]
 script = ExtResource("1_g2els")
 
-[node name="godette" parent="." unique_id=1120792004 instance=ExtResource("1_3vyb7")]
+[node name="Model" parent="." unique_id=1120792004 instance=ExtResource("1_3vyb7")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=960925333]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0277672, 0)
 shape = SubResource("CapsuleShape3D_3vyb7")
 
 [node name="CameraController" parent="." unique_id=1080607260 instance=ExtResource("3_qhqgy")]
+transform = Transform3D(1, 0, 0, 0, 0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 1.4, 0)
