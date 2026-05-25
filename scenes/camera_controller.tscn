@@ -7,9 +7,13 @@
 [node name="CameraController" type="Node3D" unique_id=832296167]
 script = ExtResource("1_nsieu")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=25090292]
+[node name="CameraYawPivot" type="Node3D" parent="." unique_id=246906464]
+
+[node name="CameraPitchPivot" type="Node3D" parent="CameraYawPivot" unique_id=1746624831]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraYawPivot/CameraPitchPivot" unique_id=25090292]
 shape = SubResource("SphereShape3D_nsieu")
 spring_length = 8.0
 
-[node name="Camera3D" type="Camera3D" parent="SpringArm3D" unique_id=738739612]
+[node name="Camera3D" type="Camera3D" parent="CameraYawPivot/CameraPitchPivot/SpringArm3D" unique_id=738739612]
 current = true
