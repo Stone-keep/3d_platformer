@@ -6,7 +6,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3vyb7"]
 radius = 0.6069336
-height = 2.1000977
+height = 2.2248535
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qhqgy"]
 animation = &"Hit_B"
@@ -161,7 +161,7 @@ bones/40/rotation = Quaternion(-0.75825274, -1.6763805e-07, 0.6519607, -1.117586
 bones/40/scale = Vector3(1, 1.0000001, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=960925333]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0277672, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0901451, 0)
 shape = SubResource("CapsuleShape3D_3vyb7")
 
 [node name="CameraController" parent="." unique_id=1080607260 instance=ExtResource("3_qhqgy")]

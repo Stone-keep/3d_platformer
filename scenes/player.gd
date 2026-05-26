@@ -34,8 +34,6 @@ func get_input() -> void:
 	direction = (camera_yaw_pivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump()
-	if Input.is_action_just_pressed("exit"):
-		$AnimationTree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func move(delta):
 	var vel_3d = Vector3(velocity.x, 0, velocity.z)
@@ -67,4 +65,9 @@ func animate(delta) -> void:
 	else:
 		move_state_machine.travel("Jump")
 	if direction:
-		model.rotation.y = rotate_toward(model.rotation.y, -Vector2(direction.x, direction.z).angle() + PI/2, 6.0 * delta)
+		var horizontal_velocity := Vector3(velocity.x, 0, velocity.z)
+		if horizontal_velocity.length() > 0.2:
+			model.rotation.y = rotate_toward(model.rotation.y, -Vector2(horizontal_velocity.x, horizontal_velocity.z).angle() + PI / 2, 8.0 * delta)
+
+func get_hit() -> void:
+	$AnimationTree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
