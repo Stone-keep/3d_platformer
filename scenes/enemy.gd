@@ -37,7 +37,7 @@ func move(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if player and is_on_floor() and not is_player_above():
+	if player and can_see_player() and is_on_floor() and not is_player_above():
 		direction = player.global_position - global_position
 		direction.y = 0
 		direction = direction.normalized()
@@ -62,6 +62,22 @@ func is_player_above() -> bool:
 		and horizontal_distance < idle_when_player_above_radius
 	)
 		
+func can_see_player() -> bool:
+	if not player:
+		return false
+	
+	var space_state := get_world_3d().direct_space_state
+	var from := global_position + Vector3(0, 1.2, 0)
+	var to := player.global_position + Vector3(0, 1, 0)
+	
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = 1
+	query.exclude = [self]
+
+	var result := space_state.intersect_ray(query)
+
+	return result.is_empty()
+
 func die() -> void:
 	dead = true
 	death_despawn_timer.start()
@@ -112,7 +128,7 @@ func _on_attack_area_body_exited(body: Node3D) -> void:
 
 func _on_attack_delay_timeout() -> void:
 	attack_delay = false
-	if player and player_in_attack_range:
+	if player and player_in_attack_range and can_see_player():
 		player.get_hit(attack_damage)
 		attack_cooldown_timer.wait_time = randf_range(2.5, 4.5)
 		attack_cooldown_timer.start()
