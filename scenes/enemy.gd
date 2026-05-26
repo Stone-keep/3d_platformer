@@ -3,8 +3,11 @@ extends CharacterBody3D
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var move_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/MoveStateMachine/playback")
 @onready var model: Node3D = $Model
+@onready var collision_alive: CollisionShape3D = $CollisionShapeAlive
+@onready var collision_dead: CollisionShape3D = $CollisionShapeDead
 @onready var attack_cooldown_timer: Timer = $AttackCooldown
 @onready var attack_delay_timer: Timer = $AttackDelay
+@onready var death_despawn_timer: Timer = $DeathDespawnTimer
 
 # Movement
 var speed := 3.0
@@ -20,13 +23,15 @@ var can_move := true
 var player_in_attack_range := false
 var attack_delay := false
 var attack_damage := 1
+var dead := false
 
 func _physics_process(delta: float) -> void:
-	move(delta)
-	animate(delta)
-	attack()
-	if can_move:
-		move_and_slide()
+	if not dead:
+		move(delta)
+		animate(delta)
+		attack()
+		if can_move:
+			move_and_slide()
 
 func move(delta: float) -> void:
 	if not is_on_floor():
@@ -58,7 +63,12 @@ func is_player_above() -> bool:
 	)
 		
 func die() -> void:
-	print("dead")
+	dead = true
+	death_despawn_timer.start()
+	collision_alive.set_deferred("disabled", true)
+	collision_dead.set_deferred("disabled", false)
+	var tween = create_tween()
+	tween.tween_property(animation_tree, "parameters/DeathBlend/blend_amount", 1.0, 0.8)
 
 func attack() -> void:
 	if player_in_attack_range and attack_cooldown_timer.is_stopped() and not attack_delay:
@@ -68,14 +78,14 @@ func attack() -> void:
 func animate(delta: float) -> void:
 	move_state_machine.travel("Running_01" if velocity and not player_in_attack_range and not is_player_above() else "Idle")
 	if direction:
-		model.rotation.y = rotate_toward(
-			model.rotation.y,
+		rotation.y = rotate_toward(
+			rotation.y,
 			-Vector2(direction.x, direction.z).angle() + PI/2,
 			6.0 * delta
 			)
 	if player_in_attack_range:
-		model.rotation.y = rotate_toward(
-			model.rotation.y,
+		rotation.y = rotate_toward(
+			rotation.y,
 			-Vector2(player.global_position.x - global_position.x, player.global_position.z - global_position.z).angle() + PI/2,
 			6.0 * delta
 			)
@@ -111,3 +121,8 @@ func _on_attack_delay_timeout() -> void:
 func _on_stomp_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player") and body.can_stomp_enemy():
 		die()
+
+func _on_death_despawn_timer_timeout() -> void:
+	var tween = create_tween()
+	tween.tween_property(self, "position:y", position.y - 1, 2.0)
+	tween.tween_callback(queue_free)

@@ -88,3 +88,6 @@ func get_hit(damage: int) -> void:
 
 func can_stomp_enemy() -> bool:
 	return was_falling
+
+func _on_invulnerability_timer_timeout() -> void:
+	is_invulnerable = false
