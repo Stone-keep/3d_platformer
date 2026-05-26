@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var camera_yaw_pivot: Node3D = $CameraController/CameraYawPivot
 @onready var model: Node3D = $Model
+@onready var move_state_machine = $AnimationTree.get("parameters/MoveStateMachine/playback")
 
 # Movement
 var speed := 5.0
@@ -31,9 +32,10 @@ func _physics_process(delta: float) -> void:
 func get_input() -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	direction = (camera_yaw_pivot.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump()
+	if Input.is_action_just_pressed("exit"):
+		$AnimationTree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func move(delta):
 	var vel_3d = Vector3(velocity.x, 0, velocity.z)
@@ -60,5 +62,9 @@ func apply_gravity(delta) -> void:
 		velocity.y -= gravity * delta
 	
 func animate(delta) -> void:
+	if is_on_floor():
+		move_state_machine.travel("Running" if direction else "Idle")
+	else:
+		move_state_machine.travel("Jump")
 	if direction:
 		model.rotation.y = rotate_toward(model.rotation.y, -Vector2(direction.x, direction.z).angle() + PI/2, 6.0 * delta)
