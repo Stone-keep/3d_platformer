@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://b5f2yeg51llvy"]
 
+[ext_resource type="Script" uid="uid://jo5xx27tfd8y" path="res://scenes/game.gd" id="1_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://my3mogyx5i3j" path="res://scenes/heart.tscn" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://bxg3vjaykjay7" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://cu1yf7ovia8ps" path="res://scenes/enemy.tscn" id="2_yqjtg"]
 
@@ -29,6 +31,16 @@ size = Vector3(1, 10, 10)
 size = Vector3(1, 10, 10)
 
 [node name="Game" type="Node3D" unique_id=1454032110]
+script = ExtResource("1_lbhrr")
+heart_scene = ExtResource("1_lnu2h")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1022658149]
+
+[node name="HeartContainer" type="HFlowContainer" parent="UI" unique_id=558275136]
+custom_minimum_size = Vector2(260, 40)
+anchors_preset = -1
+offset_left = 10.0
+offset_top = 10.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=5311621]
 environment = SubResource("Environment_lnu2h")
@@ -62,5 +74,7 @@ shape = SubResource("BoxShape3D_yqjtg")
 [node name="Player" parent="Characters" unique_id=1302882633 instance=ExtResource("1_uwrxv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.59066176, 8.176463)
 
-[node name="Enemy" parent="." unique_id=257004890 instance=ExtResource("2_yqjtg")]
+[node name="Enemy" parent="Characters" unique_id=257004890 instance=ExtResource("2_yqjtg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.112145, 0.54968095, -6.8660603)
+
+[connection signal="health_changed" from="Characters/Player" to="." method="_on_player_health_changed"]

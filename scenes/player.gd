@@ -24,6 +24,7 @@ var was_falling := false
 var health := 6
 var is_invulnerable := false
 var invulnerability_time := 2.0
+signal health_changed(health: int)
 
 func _ready() -> void:
 	setup_jump_values()
@@ -81,6 +82,8 @@ func get_hit(damage: int) -> void:
 		is_invulnerable = true
 		invulnerability_timer.start(invulnerability_time)
 		health -= damage
+		print(health)
+		health_changed.emit(health)
 		if health <= 0:
 			print("dead")
 
@@ -91,3 +94,4 @@ func can_stomp_enemy() -> bool:
 
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
+
