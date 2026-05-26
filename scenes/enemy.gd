@@ -16,9 +16,10 @@ var direction: Vector3
 var player: CharacterBody3D
 var can_move := true
 
-var attack_target: CharacterBody3D
+# Attack/Damage
 var player_in_attack_range := false
 var attack_delay := false
+var attack_damage := 1
 
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -56,6 +57,9 @@ func is_player_above() -> bool:
 		and horizontal_distance < idle_when_player_above_radius
 	)
 		
+func die() -> void:
+	print("dead")
+
 func attack() -> void:
 	if player_in_attack_range and attack_cooldown_timer.is_stopped() and not attack_delay:
 		attack_delay = true
@@ -99,7 +103,11 @@ func _on_attack_area_body_exited(body: Node3D) -> void:
 func _on_attack_delay_timeout() -> void:
 	attack_delay = false
 	if player and player_in_attack_range:
-		player.get_hit()
-		attack_cooldown_timer.wait_time = randf_range(3.0, 5.0)
+		player.get_hit(attack_damage)
+		attack_cooldown_timer.wait_time = randf_range(2.5, 4.5)
 		attack_cooldown_timer.start()
 		animation_tree.set("parameters/Attack/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+func _on_stomp_area_body_entered(body: Node3D) -> void:
+	if body.is_in_group("player") and body.can_stomp_enemy():
+		die()
