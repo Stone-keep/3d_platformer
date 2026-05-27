@@ -8,8 +8,10 @@
 script = ExtResource("1_nsieu")
 
 [node name="CameraYawPivot" type="Node3D" parent="." unique_id=246906464]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="CameraPitchPivot" type="Node3D" parent="CameraYawPivot" unique_id=1746624831]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 0, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraYawPivot/CameraPitchPivot" unique_id=25090292]
 shape = SubResource("SphereShape3D_nsieu")

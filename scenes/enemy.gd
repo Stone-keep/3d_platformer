@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var attack_cooldown_timer: Timer = $AttackCooldown
 @onready var attack_delay_timer: Timer = $AttackDelay
 @onready var death_despawn_timer: Timer = $DeathDespawnTimer
+@onready var hit_sound = $HitSound
 
 var player: CharacterBody3D
 
@@ -275,7 +276,8 @@ func lock_movement_for_attack() -> void:
 
 func _on_stomp_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player") and body.can_stomp_enemy():
-		body.jump()
+		body.jump_after_hit()
+		hit_sound.play()
 		die()
 
 func _on_death_despawn_timer_timeout() -> void:

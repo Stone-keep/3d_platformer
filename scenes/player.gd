@@ -1,9 +1,13 @@
 extends CharacterBody3D
 
+const DAMAGE_FLASH_SHADER := preload("res://shaders/damage_flash.gdshader")
+
 @onready var camera_yaw_pivot: Node3D = $CameraController/CameraYawPivot
 @onready var model: Node3D = $Model
+@onready var animation_tree: AnimationTree = $AnimationTree
 @onready var move_state_machine = $AnimationTree.get("parameters/MoveStateMachine/playback")
 @onready var invulnerability_timer = $InvulnerabilityTimer
+@onready var jump_sound = $JumpSound
 
 # Movement
 var speed := 5.0
@@ -24,10 +28,15 @@ var was_falling := false
 var health := 6
 var is_invulnerable := false
 var invulnerability_time := 2.0
+var damage_flash_duration := 0.5
+var damage_flash_color := Color(1.0, 0.25, 0.15)
+var damage_flash_materials: Array[ShaderMaterial] = []
+var damage_flash_tween: Tween
 signal health_changed(health: int)
 
 func _ready() -> void:
 	setup_jump_values()
+	setup_damage_flash_materials()
 
 func _physics_process(delta: float) -> void:
 	get_input()
@@ -61,6 +70,10 @@ func setup_jump_values():
 
 func jump():
 	velocity.y = -jump_velocity
+	jump_sound.play()
+
+func jump_after_hit():
+	velocity.y = -jump_velocity
 
 func apply_gravity(delta) -> void:
 	if not is_on_floor():
@@ -82,16 +95,50 @@ func get_hit(damage: int) -> void:
 		is_invulnerable = true
 		invulnerability_timer.start(invulnerability_time)
 		health -= damage
+		flash_damage()
 		print(health)
 		health_changed.emit(health)
 		if health <= 0:
 			print("dead")
 
-		$AnimationTree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animation_tree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+func setup_damage_flash_materials() -> void:
+	damage_flash_materials.clear()
+
+	for mesh_instance in get_mesh_instances(model):
+		var flash_material := ShaderMaterial.new()
+		flash_material.shader = DAMAGE_FLASH_SHADER
+		flash_material.set_shader_parameter("flash_color", damage_flash_color)
+		flash_material.set_shader_parameter("flash_strength", 0.0)
+		mesh_instance.material_overlay = flash_material
+		damage_flash_materials.append(flash_material)
+
+func get_mesh_instances(root: Node) -> Array[MeshInstance3D]:
+	var mesh_instances: Array[MeshInstance3D] = []
+
+	for child in root.get_children():
+		if child is MeshInstance3D:
+			mesh_instances.append(child)
+		mesh_instances.append_array(get_mesh_instances(child))
+
+	return mesh_instances
+
+func flash_damage() -> void:
+	if damage_flash_tween:
+		damage_flash_tween.kill()
+
+	set_damage_flash_strength(1.0)
+
+	damage_flash_tween = create_tween()
+	damage_flash_tween.tween_method(set_damage_flash_strength, 1.0, 0.0, damage_flash_duration)
+
+func set_damage_flash_strength(strength: float) -> void:
+	for material in damage_flash_materials:
+		material.set_shader_parameter("flash_strength", strength)
 
 func can_stomp_enemy() -> bool:
 	return was_falling
 
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
-
