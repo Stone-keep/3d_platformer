@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://cc4blyudb8set"]
+
+[ext_resource type="PackedScene" uid="uid://b16l40sj07alq" path="res://graphics/gltf/bricks_B.gltf" id="2_px2kn"]
+[ext_resource type="PackedScene" uid="uid://bielsssdewm0" path="res://graphics/gltf/bricks_A.gltf" id="2_rvc3j"]
+[ext_resource type="PackedScene" uid="uid://bwtpesmihf5qw" path="res://graphics/gltf/dirt.gltf" id="3_k5uxj"]
+[ext_resource type="PackedScene" uid="uid://bbhpdquvcslxk" path="res://graphics/gltf/dirt_with_grass.gltf" id="4_c1kwq"]
+[ext_resource type="PackedScene" uid="uid://dm41a6neon6ee" path="res://graphics/gltf/grass.gltf" id="5_2wujh"]
+[ext_resource type="PackedScene" uid="uid://bldp5t6hkf1n1" path="res://graphics/gltf/lava.gltf" id="6_6d0lc"]
+[ext_resource type="PackedScene" uid="uid://c6wssmdrqms23" path="res://graphics/gltf/metal.gltf" id="7_k3bxe"]
+[ext_resource type="PackedScene" uid="uid://bw0h87jya030e" path="res://graphics/gltf/sand_A.gltf" id="8_xqmio"]
+[ext_resource type="PackedScene" uid="uid://cn8pwvdvxby8a" path="res://graphics/gltf/sand_B.gltf" id="9_grilu"]
+[ext_resource type="PackedScene" uid="uid://b7doj7c5inkbs" path="res://graphics/gltf/sand_with_grass.gltf" id="10_b336b"]
+[ext_resource type="PackedScene" uid="uid://cdtue2s2tc3qp" path="res://graphics/gltf/stone.gltf" id="11_jkdp1"]
+[ext_resource type="PackedScene" uid="uid://d1ixgvnm676uo" path="res://graphics/gltf/tree.gltf" id="12_ttgr5"]
+[ext_resource type="PackedScene" uid="uid://bfqcdnw3aabob" path="res://graphics/gltf/water.gltf" id="13_nppdi"]
+[ext_resource type="PackedScene" uid="uid://b0le7puqve7im" path="res://graphics/gltf/wood.gltf" id="14_r1x0l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vfci0"]
+size = Vector3(2, 2, 2)
+
+[node name="LevelMesh" type="Node3D" unique_id=1992974747]
+
+[node name="bricks_A2" parent="." unique_id=1886760700 instance=ExtResource("2_rvc3j")]
+visible = false
+
+[node name="StaticBody3D" type="StaticBody3D" parent="bricks_A2/bricks_A" parent_id_path=PackedInt32Array(1886760700, 434566115) index="0" unique_id=1238687645]
+
+[node name="CollisionShape3D" parent="bricks_A2/bricks_A/StaticBody3D" index="0"]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="bricks_B2" parent="." unique_id=717308020 instance=ExtResource("2_px2kn")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="bricks_B2/bricks_B" parent_id_path=PackedInt32Array(717308020, 1437405812) index="0" unique_id=2052451901]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="bricks_B2/bricks_B/StaticBody3D" unique_id=1950874651]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="dirt2" parent="." unique_id=518616716 instance=ExtResource("3_k5uxj")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="dirt2/dirt" parent_id_path=PackedInt32Array(518616716, 1239118522) index="0" unique_id=817839065]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="dirt2/dirt/StaticBody3D" unique_id=665835054]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="dirt_with_grass2" parent="." unique_id=1856267723 instance=ExtResource("4_c1kwq")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="dirt_with_grass2/dirt_with_grass" parent_id_path=PackedInt32Array(1856267723, 721933975) index="0" unique_id=507875632]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="dirt_with_grass2/dirt_with_grass/StaticBody3D" unique_id=1043116172]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="grass2" parent="." unique_id=1225364131 instance=ExtResource("5_2wujh")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="grass2/grass" parent_id_path=PackedInt32Array(1225364131, 922465211) index="0" unique_id=1940401490]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="grass2/grass/StaticBody3D" unique_id=182342574]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="lava2" parent="." unique_id=301370850 instance=ExtResource("6_6d0lc")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="lava2/lava" parent_id_path=PackedInt32Array(301370850, 177077787) index="0" unique_id=2113673478]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="lava2/lava/StaticBody3D" unique_id=813069725]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="metal2" parent="." unique_id=128541631 instance=ExtResource("7_k3bxe")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="metal2/metal" parent_id_path=PackedInt32Array(128541631, 1470561552) index="0" unique_id=1430092363]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="metal2/metal/StaticBody3D" unique_id=1366023345]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="sand_A2" parent="." unique_id=1856928236 instance=ExtResource("8_xqmio")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="sand_A2/sand_A" parent_id_path=PackedInt32Array(1856928236, 1436689225) index="0" unique_id=1566888524]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="sand_A2/sand_A/StaticBody3D" unique_id=422914457]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="sand_B2" parent="." unique_id=1236556722 instance=ExtResource("9_grilu")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="sand_B2/sand_B" parent_id_path=PackedInt32Array(1236556722, 498282946) index="0" unique_id=889378775]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="sand_B2/sand_B/StaticBody3D" unique_id=793236741]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="sand_with_grass2" parent="." unique_id=626512307 instance=ExtResource("10_b336b")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="sand_with_grass2/sand_with_grass" parent_id_path=PackedInt32Array(626512307, 384171437) index="0" unique_id=2054153401]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="sand_with_grass2/sand_with_grass/StaticBody3D" unique_id=396651009]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="stone2" parent="." unique_id=1211665141 instance=ExtResource("11_jkdp1")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="stone2/stone" parent_id_path=PackedInt32Array(1211665141, 1266217597) index="0" unique_id=1048876176]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="stone2/stone/StaticBody3D" unique_id=799579349]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="tree2" parent="." unique_id=184206206 instance=ExtResource("12_ttgr5")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="tree2/tree" parent_id_path=PackedInt32Array(184206206, 269586948) index="0" unique_id=710294470]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="tree2/tree/StaticBody3D" unique_id=1843108761]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="water2" parent="." unique_id=1761708799 instance=ExtResource("13_nppdi")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="water2/water" parent_id_path=PackedInt32Array(1761708799, 602077525) index="0" unique_id=2093296195]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="water2/water/StaticBody3D" unique_id=625155029]
+shape = SubResource("BoxShape3D_vfci0")
+
+[node name="wood2" parent="." unique_id=199878759 instance=ExtResource("14_r1x0l")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wood2/wood" parent_id_path=PackedInt32Array(199878759, 1045167128) index="0" unique_id=1111175414]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="wood2/wood/StaticBody3D" unique_id=1198817234]
+shape = SubResource("BoxShape3D_vfci0")
+
+[editable path="bricks_A2"]
+[editable path="bricks_B2"]
+[editable path="dirt2"]
+[editable path="dirt_with_grass2"]
+[editable path="grass2"]
+[editable path="lava2"]
+[editable path="metal2"]
+[editable path="sand_A2"]
+[editable path="sand_B2"]
+[editable path="sand_with_grass2"]
+[editable path="stone2"]
+[editable path="tree2"]
+[editable path="water2"]
+[editable path="wood2"]

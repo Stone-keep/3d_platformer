@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var model: Node3D = $Model
 @onready var collision_alive: CollisionShape3D = $CollisionShapeAlive
 @onready var collision_dead: CollisionShape3D = $CollisionShapeDead
+@onready var stomp_area: Area3D = $StompArea
 @onready var attack_cooldown_timer: Timer = $AttackCooldown
 @onready var attack_delay_timer: Timer = $AttackDelay
 @onready var death_despawn_timer: Timer = $DeathDespawnTimer
@@ -185,6 +186,7 @@ func can_see_player() -> bool:
 func die() -> void:
 	dead = true
 	death_despawn_timer.start()
+	stomp_area.set_deferred("monitoring", false)
 	collision_alive.set_deferred("disabled", true)
 	collision_dead.set_deferred("disabled", false)
 	var tween = create_tween()
@@ -273,6 +275,7 @@ func lock_movement_for_attack() -> void:
 
 func _on_stomp_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player") and body.can_stomp_enemy():
+		body.jump()
 		die()
 
 func _on_death_despawn_timer_timeout() -> void:
