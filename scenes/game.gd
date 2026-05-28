@@ -26,8 +26,15 @@ const BRICK_IDS := {
 	"wood": 13,
 }
 
+const DANGEROUS_BRICK_IDS := {
+	"lava": 5,
+	"water": 12
+}
+
 var total_stars: int
 var collected_stars := 0
+
+var last_safe_brick: Vector3i
 
 func _ready() -> void:
 	Global.level_won = false
@@ -58,12 +65,32 @@ func check_brick_under_player():
 	var check_position := player_hazard_detector.global_position
 	var cell := gridmap.local_to_map(gridmap.to_local(check_position))
 	var item_id := gridmap.get_cell_item(cell)
-
+	if item_id != GridMap.INVALID_CELL_ITEM and item_id not in DANGEROUS_BRICK_IDS.values() and player.is_on_floor():
+		last_safe_brick = cell
+		print(last_safe_brick)
 	if item_id == BRICK_IDS["water"]:
-		print("Player is on water")
-
-	if item_id == BRICK_IDS["lava"]:
+		if not player.is_drowning:
+			start_drowning_sequence()
+	elif item_id == BRICK_IDS["lava"]:
 		player.get_hit(1)
+
+func respawn_player_on_cell(cell_id: Vector3i):
+	var respawn_position := gridmap.to_global(gridmap.map_to_local(cell_id))
+	respawn_position.y += 1.0
+
+	player.global_position = respawn_position
+	player.velocity = Vector3.ZERO
+
+func start_drowning_sequence():
+	await player.drown()
+	#await fade_to_black()
+	
+	player.get_hit(1)
+	respawn_player_on_cell(last_safe_brick)
+	player.reset_after_drowning()
+
+	#await fade_from_black()
+	player.can_move = true
 
 func _on_player_health_changed(health: int) -> void:
 	update_hearts(health)

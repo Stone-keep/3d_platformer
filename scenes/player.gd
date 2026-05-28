@@ -14,6 +14,7 @@ var speed := 5.0
 var acceleration := 5.0
 var friction := 8.0
 var direction: Vector3
+var can_move := true
 
 # Jumping
 @export var jump_height: float = 3.0
@@ -35,6 +36,9 @@ var damage_flash_tween: Tween
 signal health_changed(health: int)
 signal died()
 
+# Hazards
+var is_drowning := false
+
 func _ready() -> void:
 	setup_jump_values()
 	setup_damage_flash_materials()
@@ -45,7 +49,8 @@ func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
 	animate(delta)
 	was_falling = velocity.y < 0.0
-	move_and_slide()
+	if can_move:
+		move_and_slide()
 
 func get_input() -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
@@ -71,6 +76,7 @@ func setup_jump_values():
 
 func jump():
 	velocity.y = -jump_velocity
+	jump_sound.pitch_scale = randf_range(0.9, 1.1)
 	jump_sound.play()
 
 func jump_after_hit():
@@ -132,6 +138,20 @@ func flash_damage() -> void:
 
 	damage_flash_tween = create_tween()
 	damage_flash_tween.tween_method(set_damage_flash_strength, 1.0, 0.0, damage_flash_duration)
+
+func drown():
+	is_drowning = true
+	velocity = Vector3.ZERO
+	can_move = false
+	animation_tree.set("parameters/Drowning/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	var tween = create_tween()
+	tween.tween_property(model, "position:y", position.y - 5, 1.6)
+	await tween.finished
+
+func reset_after_drowning():
+	is_drowning = false
+	model.position = Vector3.ZERO
+	velocity = Vector3.ZERO
 
 func set_damage_flash_strength(strength: float) -> void:
 	for material in damage_flash_materials:
