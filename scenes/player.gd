@@ -33,6 +33,7 @@ var damage_flash_color := Color(1.0, 0.25, 0.15)
 var damage_flash_materials: Array[ShaderMaterial] = []
 var damage_flash_tween: Tween
 signal health_changed(health: int)
+signal died()
 
 func _ready() -> void:
 	setup_jump_values()
@@ -99,7 +100,7 @@ func get_hit(damage: int) -> void:
 		print(health)
 		health_changed.emit(health)
 		if health <= 0:
-			print("dead")
+			died.emit()
 
 		animation_tree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 

@@ -7,6 +7,7 @@ extends Node3D
 @onready var gridmap: GridMap = $GridMap
 @onready var stars: Node3D = $Stars
 @onready var stars_label: Label = $UI/StarContainer/StarLabel
+@onready var timer_label: Label = $UI/TimerLabel
 
 const BRICK_IDS := {
 	"bricks_A": 0,
@@ -29,7 +30,9 @@ var total_stars: int
 var collected_stars := 0
 
 func _ready() -> void:
+	Global.won = false
 	player.health_changed.connect(_on_player_health_changed)
+	player.died.connect(_on_player_death)
 	update_hearts(player.health)
 	var gold_stars = stars.get_children()
 	total_stars = gold_stars.size()
@@ -37,7 +40,6 @@ func _ready() -> void:
 		star.collected.connect(_on_gold_star_collected)
 	update_stars_label()
 
-	
 func _physics_process(_delta: float) -> void:
 	check_brick_under_player()
 
@@ -68,3 +70,15 @@ func _on_player_health_changed(health: int) -> void:
 func _on_gold_star_collected() -> void:
 	collected_stars += 1
 	update_stars_label()
+	if collected_stars == total_stars:
+		trigger_game_over(true)
+
+func _on_player_death():
+	trigger_game_over(false)
+
+func trigger_game_over(won: bool):
+	timer_label.is_running = false
+	Global.last_time = timer_label.level_time
+	if won:
+		if timer_label.level_time < Global.best_time:
+			Global.best_time = timer_label.level_time
