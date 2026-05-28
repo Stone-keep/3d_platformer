@@ -101,7 +101,6 @@ func get_hit(damage: int) -> void:
 		health_changed.emit(health)
 		if health <= 0:
 			died.emit()
-
 		animation_tree.set("parameters/GetHit/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func setup_damage_flash_materials() -> void:

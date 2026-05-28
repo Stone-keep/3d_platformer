@@ -63,6 +63,7 @@ stretch_mode = 4
 
 [node name="StarLabel" type="Label" parent="UI/StarContainer" unique_id=96473338]
 layout_mode = 2
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_vtaks")
 theme_override_font_sizes/font_size = 40
 text = "0 / X"
@@ -73,6 +74,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_top = 10.0
 grow_horizontal = 2
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_vtaks")
 theme_override_font_sizes/font_size = 40
 text = "0"
@@ -108,20 +110,17 @@ metadata/_editor_floor_ = Vector3(0, 2, 0)
 [node name="GoldStar" parent="Stars" unique_id=494596301 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -12.9532995, 23.64387, 12.988986)
 
-[node name="GoldStar2" parent="Stars" unique_id=1074206027 instance=ExtResource("6_p57ef")]
-transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 32.87599, 5.8887043, -19.242487)
-
-[node name="GoldStar3" parent="Stars" unique_id=1928100925 instance=ExtResource("6_p57ef")]
+[node name="GoldStar2" parent="Stars" unique_id=1928100925 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 37.05582, -4.713482, 22.889933)
 
-[node name="GoldStar4" parent="Stars" unique_id=244806062 instance=ExtResource("6_p57ef")]
+[node name="GoldStar3" parent="Stars" unique_id=244806062 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 27.060682, 19.657318, 36.801754)
 
-[node name="GoldStar5" parent="Stars" unique_id=785508858 instance=ExtResource("6_p57ef")]
+[node name="GoldStar4" parent="Stars" unique_id=785508858 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.050000004, -8.220528, 7.929905, -29.57961)
 
-[node name="GoldStar6" parent="Stars" unique_id=268876947 instance=ExtResource("6_p57ef")]
+[node name="GoldStar5" parent="Stars" unique_id=268876947 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -6.9471445, 19.829782, -13.068664)
 
-[node name="GoldStar7" parent="Stars" unique_id=1381438627 instance=ExtResource("6_p57ef")]
+[node name="GoldStar6" parent="Stars" unique_id=1381438627 instance=ExtResource("6_p57ef")]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 20.057577, 17.617062, -21.166426)

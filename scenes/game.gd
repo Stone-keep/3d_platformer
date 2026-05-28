@@ -30,7 +30,7 @@ var total_stars: int
 var collected_stars := 0
 
 func _ready() -> void:
-	Global.won = false
+	Global.level_won = false
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_death)
 	update_hearts(player.health)
@@ -42,6 +42,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	check_brick_under_player()
+	test_game_over()
 
 func update_hearts(health):
 	for heart in heart_container.get_children():
@@ -76,9 +77,21 @@ func _on_gold_star_collected() -> void:
 func _on_player_death():
 	trigger_game_over(false)
 
+func test_game_over():
+	if Input.is_action_just_pressed("Test01"):
+		trigger_game_over(true)
+	if Input.is_action_just_pressed("Test02"):
+		trigger_game_over(false)
+
 func trigger_game_over(won: bool):
 	timer_label.is_running = false
+	Global.level_won = won
+	Global.final_collected_stars = collected_stars
+	Global.final_total_stars = total_stars
 	Global.last_time = timer_label.level_time
 	if won:
-		if timer_label.level_time < Global.best_time:
-			Global.best_time = timer_label.level_time
+		if not Global.best_time:
+			Global.best_time = Global.last_time
+		if Global.last_time < Global.best_time:
+			Global.best_time = Global.last_time
+	get_tree().change_scene_to_file("res://scenes/game_over.tscn")

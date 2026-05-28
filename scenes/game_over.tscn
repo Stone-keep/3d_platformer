@@ -1,8 +1,74 @@
 [gd_scene format=3 uid="uid://jupm1c8nh0m8"]
 
+[ext_resource type="Script" uid="uid://7imjbqgmv3ys" path="res://scenes/game_over.gd" id="1_racf3"]
 [ext_resource type="MeshLibrary" uid="uid://u5bxqqknwgpp" path="res://mesh/level_mesh.tres" id="1_xeevv"]
 [ext_resource type="PackedScene" uid="uid://bctcp65yp8t3f" path="res://graphics/characters/godette/godette.glb" id="2_wqhvx"]
+[ext_resource type="Texture2D" uid="uid://dk7j5n4ven56y" path="res://graphics/ui/star_transparent.png" id="3_7m3ot"]
 [ext_resource type="FontFile" uid="uid://crq45t837ux5w" path="res://graphics/ui/font/Fredoka-SemiBold.ttf" id="3_tbwuq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.12, 0.14, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.02, 0.02, 0.02, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+bg_color = Color(0.06, 0.06, 0.07, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+bg_color = Color(0.22, 0.22, 0.25, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.85, 0.85, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_focus"]
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+bg_color = Color(0.18, 0.18, 0.21, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.35, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xeevv"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -18,6 +84,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [node name="GameOver" type="Node3D" unique_id=1552726458]
+script = ExtResource("1_racf3")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=752709693]
 
@@ -33,22 +100,52 @@ grow_vertical = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 0.053
+anchor_top = 0.03
 anchor_right = 0.5
-anchor_bottom = 0.053
+anchor_bottom = 0.03
 grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("3_tbwuq")
 theme_override_font_sizes/font_size = 60
 text = "GAME OVER"
+
+[node name="StarsContainer" type="HBoxContainer" parent="CanvasLayer/Control" unique_id=849909169]
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.13
+anchor_right = 0.5
+anchor_bottom = 0.13
+grow_horizontal = 2
+
+[node name="StarsLabel" type="Label" parent="CanvasLayer/Control/StarsContainer" unique_id=693751568]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_tbwuq")
+theme_override_font_sizes/font_size = 40
+text = "Stars Collected: 0/0"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/StarsContainer" unique_id=2002954246]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_7m3ot")
+expand_mode = 2
+stretch_mode = 4
 
 [node name="LastTimeLabel" type="Label" parent="CanvasLayer/Control" unique_id=1050128442]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 0.18
+anchor_top = 0.23
 anchor_right = 0.5
-anchor_bottom = 0.18
+anchor_bottom = 0.23
 grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_tbwuq")
 theme_override_font_sizes/font_size = 40
 text = "Time Played: XXX"
@@ -57,10 +154,12 @@ text = "Time Played: XXX"
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 0.28
+anchor_top = 0.32
 anchor_right = 0.5
-anchor_bottom = 0.28
+anchor_bottom = 0.32
 grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
 theme_override_fonts/font = ExtResource("3_tbwuq")
 theme_override_font_sizes/font_size = 40
 text = "Best Time: XXX"
@@ -77,18 +176,40 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="RestartButton" type="Button" parent="CanvasLayer/Control/ButtonContainer" unique_id=1550027751]
+custom_minimum_size = Vector2(180, 82)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("3_tbwuq")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_focus")
 text = "Start
 Again"
 
 [node name="ExitButton" type="Button" parent="CanvasLayer/Control/ButtonContainer" unique_id=1919085340]
+custom_minimum_size = Vector2(180, 82)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("3_tbwuq")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_focus")
 text = "Exit"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1033109449]
@@ -108,10 +229,10 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1995265772]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2, 3.555, -6.858)
 
-[node name="godette" parent="." unique_id=786584334 instance=ExtResource("2_wqhvx")]
+[node name="Player" parent="." unique_id=786584334 instance=ExtResource("2_wqhvx")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2, 2, -2.162084)
 
-[node name="Skeleton3D" parent="godette/Rig" parent_id_path=PackedInt32Array(786584334, 673072099) index="0" unique_id=1593690738]
+[node name="Skeleton3D" parent="Player/Rig" parent_id_path=PackedInt32Array(786584334, 673072099) index="0" unique_id=1593690738]
 bones/1/position = Vector3(0, 0.39206383, 0)
 bones/1/rotation = Quaternion(-1.11122625e-10, 0.043157753, 2.5724098e-09, 0.9990683)
 bones/1/scale = Vector3(0.99999994, 1, 0.99999994)
@@ -197,4 +318,7 @@ bones/40/position = Vector3(-0.5108437, 0.78831214, 0.059736922)
 bones/40/rotation = Quaternion(-0.7582528, -1.527369e-07, 0.65196073, -1.1175871e-08)
 bones/40/scale = Vector3(1, 1.0000001, 1)
 
-[editable path="godette"]
+[connection signal="pressed" from="CanvasLayer/Control/ButtonContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/ButtonContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+
+[editable path="Player"]
