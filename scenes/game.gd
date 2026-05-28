@@ -5,6 +5,8 @@ extends Node3D
 @onready var player_hazard_detector: Marker3D = $Characters/Player/HazardDetector
 @onready var heart_container: HFlowContainer = $UI/HeartContainer
 @onready var gridmap: GridMap = $GridMap
+@onready var stars: Node3D = $Stars
+@onready var stars_label: Label = $UI/StarContainer/StarLabel
 
 const BRICK_IDS := {
 	"bricks_A": 0,
@@ -23,9 +25,18 @@ const BRICK_IDS := {
 	"wood": 13,
 }
 
+var total_stars: int
+var collected_stars := 0
+
 func _ready() -> void:
 	player.health_changed.connect(_on_player_health_changed)
 	update_hearts(player.health)
+	var gold_stars = stars.get_children()
+	total_stars = gold_stars.size()
+	for star in gold_stars:
+		star.collected.connect(_on_gold_star_collected)
+	update_stars_label()
+
 	
 func _physics_process(_delta: float) -> void:
 	check_brick_under_player()
@@ -36,6 +47,9 @@ func update_hearts(health):
 	for h in health:
 		var heart = heart_scene.instantiate()
 		heart_container.add_child(heart)
+
+func update_stars_label():
+	stars_label.text = str(collected_stars, " / ", total_stars)
 
 func check_brick_under_player():
 	var check_position := player_hazard_detector.global_position
@@ -48,6 +62,9 @@ func check_brick_under_player():
 	if item_id == BRICK_IDS["lava"]:
 		player.get_hit(1)
 
-
 func _on_player_health_changed(health: int) -> void:
 	update_hearts(health)
+
+func _on_gold_star_collected() -> void:
+	collected_stars += 1
+	update_stars_label()
