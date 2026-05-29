@@ -47,6 +47,7 @@ func check_brick_under_player():
 	var check_position := player_hazard_detector.global_position
 	var cell := gridmap.local_to_map(gridmap.to_local(check_position))
 	var item_id := gridmap.get_cell_item(cell)
+	player.current_ground_item_id = item_id
 	if item_id != GridMap.INVALID_CELL_ITEM and item_id not in Global.DANGEROUS_BRICK_IDS.values() and player.is_on_floor():
 		last_safe_brick = cell
 	if item_id == Global.BRICK_IDS["water"]:
@@ -74,8 +75,8 @@ func start_drowning_sequence():
 	await get_tree().create_timer(0.5).timeout
 
 	Global.fade_music_in()
-	player.can_move = true
 	await fade_from_black()
+	player.can_move = true
 	
 
 func fade_to_black():

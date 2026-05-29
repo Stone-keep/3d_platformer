@@ -2,12 +2,20 @@ extends CharacterBody3D
 
 const DAMAGE_FLASH_SHADER := preload("res://shaders/damage_flash.gdshader")
 
+@onready var camera: Camera3D = $CameraController/CameraYawPivot/CameraPitchPivot/SpringArm3D/Camera3D
 @onready var camera_yaw_pivot: Node3D = $CameraController/CameraYawPivot
+@onready var camera_pivot: Node3D = $CameraController/CameraYawPivot/CameraPitchPivot
 @onready var model: Node3D = $Model
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var move_state_machine = $AnimationTree.get("parameters/MoveStateMachine/playback")
 @onready var invulnerability_timer = $InvulnerabilityTimer
 @onready var sounds = $Sounds
+
+# Camera
+
+var model_hidden_by_camera := false
+var hide_model_distance := 0.9
+var show_model_distance := 1.3
 
 # Movement
 var speed := 5.0
@@ -15,6 +23,9 @@ var acceleration := 5.0
 var friction := 8.0
 var direction: Vector3
 var can_move := true
+var current_ground_item_id := GridMap.INVALID_CELL_ITEM
+var footstep_timer := 0.0
+var footstep_interval := 0.45
 
 # Jumping
 @export var jump_height: float = 3.0
@@ -44,13 +55,14 @@ func _ready() -> void:
 	setup_damage_flash_materials()
 
 func _physics_process(delta: float) -> void:
+	hide_model_close_to_camera()
 	if can_move:
 		get_input()
 		move(delta)
 		apply_gravity(delta)
 		animate(delta)
+		update_footsteps(delta)
 		was_falling = velocity.y < 0.0
-	
 		move_and_slide()
 
 func get_input() -> void:
@@ -96,6 +108,16 @@ func animate(delta) -> void:
 		var horizontal_velocity := Vector3(velocity.x, 0, velocity.z)
 		if horizontal_velocity.length() > 0.2:
 			model.rotation.y = rotate_toward(model.rotation.y, -Vector2(horizontal_velocity.x, horizontal_velocity.z).angle() + PI / 2, 8.0 * delta)
+
+func update_footsteps(delta: float) -> void:
+	var horizontal_velocity := Vector3(velocity.x, 0, velocity.z)
+	if is_on_floor() and horizontal_velocity.length() > 0.2 and current_ground_item_id != GridMap.INVALID_CELL_ITEM:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			sounds.play_footstep_sound(current_ground_item_id)
+			footstep_timer = footstep_interval
+	else:
+		footstep_timer = 0.0
 
 func get_hit(damage: int) -> void:
 	if not is_invulnerable:
@@ -161,3 +183,12 @@ func can_stomp_enemy() -> bool:
 
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
+
+func hide_model_close_to_camera() -> void:
+	var camera_distance := camera.global_position.distance_to(camera_pivot.global_position)
+	if not model_hidden_by_camera and camera_distance < hide_model_distance:
+		model.visible = false
+		model_hidden_by_camera = true
+	elif model_hidden_by_camera and camera_distance > show_model_distance:
+		model.visible = true
+		model_hidden_by_camera = false

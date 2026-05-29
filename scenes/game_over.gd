@@ -33,6 +33,17 @@ func format_time(time) -> String:
 
 	return "%02d:%02d.%03d" % [minutes, seconds, milliseconds]
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.echo:
+		return
+
+	if event.is_action_pressed("jump"):
+		var viewport := get_viewport()
+		var focused_control := viewport.gui_get_focus_owner()
+		if focused_control is Button:
+			viewport.set_input_as_handled()
+			focused_control.pressed.emit()
+
 func _on_restart_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/game.tscn")
 
