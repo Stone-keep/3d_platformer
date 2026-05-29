@@ -5,14 +5,19 @@ extends Node3D
 @onready var last_time_label = $CanvasLayer/Control/LastTimeLabel
 @onready var best_time_label = $CanvasLayer/Control/BestTimeLabel
 @onready var animation_player = $Player/AnimationPlayer
+@onready var restart_button: Button = $CanvasLayer/Control/ButtonContainer/RestartButton
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	restart_button.grab_focus()
+
 	if Global.level_won:
 		game_over_label.text = "You Won! Congratulations!"
 		animation_player.play("Cheer")
 	else:
 		game_over_label.text = "You Lost! Try Again!"
 		animation_player.play("Sit_Floor_Idle")
+	stars_label.text = "Stars Collected: %s/%s" % [Global.final_collected_stars, Global.final_total_stars]
 	var last_time = format_time(Global.last_time)
 	last_time_label.text = "Time Played: " + last_time
 	if not Global.best_time:
