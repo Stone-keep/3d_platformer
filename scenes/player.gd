@@ -103,7 +103,6 @@ func get_hit(damage: int) -> void:
 		invulnerability_timer.start(invulnerability_time)
 		health -= damage
 		flash_damage()
-		print(health)
 		health_changed.emit(health)
 		if health <= 0:
 			died.emit()

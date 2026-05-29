@@ -49,7 +49,6 @@ func check_brick_under_player():
 	var item_id := gridmap.get_cell_item(cell)
 	if item_id != GridMap.INVALID_CELL_ITEM and item_id not in Global.DANGEROUS_BRICK_IDS.values() and player.is_on_floor():
 		last_safe_brick = cell
-		print(last_safe_brick)
 	if item_id == Global.BRICK_IDS["water"]:
 		if not player.is_drowning:
 			start_drowning_sequence()
@@ -77,7 +76,6 @@ func start_drowning_sequence():
 	Global.fade_music_in()
 	player.can_move = true
 	await fade_from_black()
-	
 	
 
 func fade_to_black():
@@ -119,4 +117,4 @@ func trigger_game_over(won: bool):
 			Global.best_time = Global.last_time
 		if Global.last_time < Global.best_time:
 			Global.best_time = Global.last_time
-	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+	get_tree().change_scene_to_file.call_deferred("res://scenes/game_over.tscn")

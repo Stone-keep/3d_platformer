@@ -51,6 +51,8 @@ var dead := false
 func _ready() -> void:
 	home_position = global_position
 	wander_wait_time = randf_range(wander_pause_min, wander_pause_max)
+	rotation.y = randf_range(0.0, TAU)
+	
 
 func _physics_process(delta: float) -> void:
 	if not dead:
