@@ -6,8 +6,8 @@
 [node name="Global" type="Node" unique_id=1993691409]
 script = ExtResource("1_nmxvb")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=634971579]
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="." unique_id=634971579]
 stream = ExtResource("1_4pk28")
-volume_db = -5.474
+volume_db = -5.0
 autoplay = true
 parameters/looping = true

@@ -21,8 +21,7 @@ config/icon="uid://dpweq38ut7cfs"
 
 [autoload]
 
-GlobalScene="*uid://bvrpehxmylifm"
-Global="*uid://c48n0yfovgvai"
+Global="*uid://bvrpehxmylifm"
 
 [display]
 

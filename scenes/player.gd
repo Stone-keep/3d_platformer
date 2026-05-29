@@ -7,7 +7,7 @@ const DAMAGE_FLASH_SHADER := preload("res://shaders/damage_flash.gdshader")
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var move_state_machine = $AnimationTree.get("parameters/MoveStateMachine/playback")
 @onready var invulnerability_timer = $InvulnerabilityTimer
-@onready var jump_sound = $JumpSound
+@onready var sounds = $Sounds
 
 # Movement
 var speed := 5.0
@@ -44,12 +44,13 @@ func _ready() -> void:
 	setup_damage_flash_materials()
 
 func _physics_process(delta: float) -> void:
-	get_input()
-	move(delta)
-	apply_gravity(delta)
-	animate(delta)
-	was_falling = velocity.y < 0.0
 	if can_move:
+		get_input()
+		move(delta)
+		apply_gravity(delta)
+		animate(delta)
+		was_falling = velocity.y < 0.0
+	
 		move_and_slide()
 
 func get_input() -> void:
@@ -76,8 +77,7 @@ func setup_jump_values():
 
 func jump():
 	velocity.y = -jump_velocity
-	jump_sound.pitch_scale = randf_range(0.9, 1.1)
-	jump_sound.play()
+	sounds.play_jump_sound()
 
 func jump_after_hit():
 	velocity.y = -jump_velocity

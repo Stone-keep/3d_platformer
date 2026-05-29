@@ -10,7 +10,7 @@ extends CharacterBody3D
 @onready var attack_cooldown_timer: Timer = $AttackCooldown
 @onready var attack_delay_timer: Timer = $AttackDelay
 @onready var death_despawn_timer: Timer = $DeathDespawnTimer
-@onready var hit_sound = $HitSound
+@onready var hit_sound: AudioStreamPlayer = $HitSound
 
 var player: CharacterBody3D
 

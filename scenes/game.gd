@@ -4,6 +4,7 @@ extends Node3D
 @onready var player: CharacterBody3D = $Characters/Player
 @onready var player_hazard_detector: Marker3D = $Characters/Player/HazardDetector
 @onready var heart_container: HFlowContainer = $UI/HeartContainer
+@onready var black_screen: ColorRect = $UI/BlackScreen
 @onready var gridmap: GridMap = $GridMap
 @onready var stars: Node3D = $Stars
 @onready var stars_label: Label = $UI/StarContainer/StarLabel
@@ -82,15 +83,31 @@ func respawn_player_on_cell(cell_id: Vector3i):
 	player.velocity = Vector3.ZERO
 
 func start_drowning_sequence():
+	Global.fade_music_out()
 	await player.drown()
-	#await fade_to_black()
+	await fade_to_black()
 	
 	player.get_hit(1)
 	respawn_player_on_cell(last_safe_brick)
 	player.reset_after_drowning()
 
-	#await fade_from_black()
+	await get_tree().create_timer(0.5).timeout
+
+	Global.fade_music_in()
 	player.can_move = true
+	await fade_from_black()
+	
+	
+
+func fade_to_black():
+	var tween = create_tween()
+	tween.tween_property(black_screen, "modulate", Color(1, 1, 1, 1), 0.5)
+	await tween.finished
+
+func fade_from_black():
+	var tween = create_tween()
+	tween.tween_property(black_screen, "modulate", Color(1, 1, 1, 0), 0.5)
+	await tween.finished
 
 func _on_player_health_changed(health: int) -> void:
 	update_hearts(health)

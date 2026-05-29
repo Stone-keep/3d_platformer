@@ -232,7 +232,7 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2, 3
 [node name="Player" parent="." unique_id=786584334 instance=ExtResource("2_wqhvx")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2, 2, -2.162084)
 
-[node name="Skeleton3D" parent="Player/Rig" parent_id_path=PackedInt32Array(786584334, 673072099) index="0" unique_id=1593690738]
+[node name="Skeleton3D" parent="Player/Rig" parent_id_path=PackedInt32Array(786584334, 913894075) index="0" unique_id=361302836]
 bones/1/position = Vector3(0, 0.39206383, 0)
 bones/1/rotation = Quaternion(-1.11122625e-10, 0.043157753, 2.5724098e-09, 0.9990683)
 bones/1/scale = Vector3(0.99999994, 1, 0.99999994)
