@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+@export var gridmap: GridMap
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var animation_player: AnimationPlayer = $Model/AnimationPlayer
 @onready var move_state_machine: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/MoveStateMachine/playback")
@@ -37,6 +38,7 @@ var wander_after_chase_wait_time := 0.0
 var is_wandering := false
 var was_chasing_player := false
 var returning_home := false
+var chase_blocked_by_terrain := false
 
 # Attack/Damage
 var attack_animation_name := "1H_Melee_Attack_Slice_Horizontal"
@@ -63,11 +65,17 @@ func move(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if can_chase_player():
-		was_chasing_player = true
-		returning_home = false
-		wander_after_chase_wait_time = wander_after_chase_delay
-		is_wandering = false
-		move_towards(player.global_position, speed, delta)
+		var chase_direction := get_horizontal_direction_to(player.global_position)
+		if can_step_towards(chase_direction):
+			was_chasing_player = true
+			returning_home = false
+			chase_blocked_by_terrain = false
+			wander_after_chase_wait_time = wander_after_chase_delay
+			is_wandering = false
+			move_towards(player.global_position, speed, delta)
+		else:
+			start_lost_player_behavior()
+			handle_lost_player(delta)
 	elif was_chasing_player:
 		handle_lost_player(delta)
 	elif can_wander():
@@ -75,8 +83,27 @@ func move(delta: float) -> void:
 	else:
 		slow_down(delta)
 
+func start_lost_player_behavior() -> void:
+	was_chasing_player = true
+	chase_blocked_by_terrain = true
+	returning_home = false
+	wander_after_chase_wait_time = wander_after_chase_delay
+	is_wandering = false
+
+func get_horizontal_direction_to(target_position: Vector3) -> Vector3:
+	var target_direction := target_position - global_position
+	target_direction.y = 0
+	return target_direction.normalized()
+
 func can_chase_player() -> bool:
-	return can_move and player and can_see_player() and is_on_floor() and not is_player_above()
+	return (
+		can_move
+		and player
+		and not chase_blocked_by_terrain
+		and can_see_player()
+		and is_on_floor()
+		and not is_player_above()
+	)
 
 func can_wander() -> bool:
 	return can_move and is_on_floor() and not player_in_attack_range and not is_player_above()
@@ -102,6 +129,7 @@ func handle_lost_player(delta: float) -> void:
 		if distance_to_home <= wander_reach_distance:
 			returning_home = false
 			was_chasing_player = false
+			chase_blocked_by_terrain = false
 			wander_wait_time = randf_range(wander_pause_min, wander_pause_max)
 			slow_down(delta)
 			return
@@ -110,12 +138,11 @@ func handle_lost_player(delta: float) -> void:
 		return
 
 	was_chasing_player = false
+	chase_blocked_by_terrain = false
 	slow_down(delta)
 
 func move_towards(target_position: Vector3, move_speed: float, delta: float) -> void:
-	direction = target_position - global_position
-	direction.y = 0
-	direction = direction.normalized()
+	direction = get_horizontal_direction_to(target_position)
 
 	var desired_velocity := direction * move_speed
 	velocity.x = move_toward(velocity.x, desired_velocity.x, acceleration * delta)
@@ -139,7 +166,6 @@ func wander(delta: float) -> void:
 		wander_wait_time = randf_range(wander_pause_min, wander_pause_max)
 		slow_down(delta)
 		return
-
 	move_towards(wander_target, wander_speed, delta)
 
 func pick_wander_target() -> void:
@@ -184,6 +210,27 @@ func can_see_player() -> bool:
 
 	return result.is_empty()
 
+func can_step_towards(dir: Vector3) -> bool:
+	if not gridmap:
+		return true
+
+	if dir.is_zero_approx():
+		return true
+
+	var check_position := global_position + dir.normalized() * 0.8
+	check_position.y -= 0.2
+
+	var cell := gridmap.local_to_map(gridmap.to_local(check_position))
+	var item_id := gridmap.get_cell_item(cell)
+
+	if item_id == GridMap.INVALID_CELL_ITEM:
+		return false
+
+	if item_id in Global.DANGEROUS_BRICK_IDS.values():
+		return false
+
+	return true
+
 func die() -> void:
 	dead = true
 	death_despawn_timer.start()
@@ -200,7 +247,7 @@ func attack() -> void:
 
 func animate(delta: float) -> void:
 	# Animation Tree
-	if can_chase_player():
+	if can_chase_player() and can_step_towards(get_horizontal_direction_to(player.global_position)):
 		move_state_machine.travel("Running_01")
 	elif returning_home:
 		move_state_machine.travel("Walking_B")

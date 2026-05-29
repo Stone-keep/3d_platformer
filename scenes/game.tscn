@@ -104,7 +104,9 @@ shadow_blur = 2.0
 [node name="Player" parent="Characters" unique_id=1302882633 instance=ExtResource("1_uwrxv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.38223, 2.4682593, -17.293327)
 
-[node name="Enemy" parent="Characters" unique_id=257004890 instance=ExtResource("2_yqjtg")]
+[node name="Enemies" type="Node3D" parent="Characters" unique_id=1906206481]
+
+[node name="Enemy" parent="Characters/Enemies" unique_id=257004890 instance=ExtResource("2_yqjtg")]
 transform = Transform3D(0.06230282, 0, 0.9980573, 0, 1, 0, -0.9980573, 0, 0.06230282, 26.871693, 2.3296804, -16.112736)
 
 [node name="GridMap" type="GridMap" parent="." unique_id=1432859747]

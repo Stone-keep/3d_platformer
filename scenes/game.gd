@@ -10,28 +10,6 @@ extends Node3D
 @onready var stars_label: Label = $UI/StarContainer/StarLabel
 @onready var timer_label: Label = $UI/TimerLabel
 
-const BRICK_IDS := {
-	"bricks_A": 0,
-	"bricks_B": 1,
-	"dirt": 2,
-	"dirt_with_grass": 3,
-	"grass": 4,
-	"lava": 5,
-	"metal": 6,
-	"sand_A": 7,
-	"sand_B": 8,
-	"sand_with_grass": 9,
-	"stone": 10,
-	"tree": 11,
-	"water": 12,
-	"wood": 13,
-}
-
-const DANGEROUS_BRICK_IDS := {
-	"lava": 5,
-	"water": 12
-}
-
 var total_stars: int
 var collected_stars := 0
 
@@ -47,6 +25,9 @@ func _ready() -> void:
 	for star in gold_stars:
 		star.collected.connect(_on_gold_star_collected)
 	update_stars_label()
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.gridmap = gridmap
+		
 
 func _physics_process(_delta: float) -> void:
 	check_brick_under_player()
@@ -66,13 +47,13 @@ func check_brick_under_player():
 	var check_position := player_hazard_detector.global_position
 	var cell := gridmap.local_to_map(gridmap.to_local(check_position))
 	var item_id := gridmap.get_cell_item(cell)
-	if item_id != GridMap.INVALID_CELL_ITEM and item_id not in DANGEROUS_BRICK_IDS.values() and player.is_on_floor():
+	if item_id != GridMap.INVALID_CELL_ITEM and item_id not in Global.DANGEROUS_BRICK_IDS.values() and player.is_on_floor():
 		last_safe_brick = cell
 		print(last_safe_brick)
-	if item_id == BRICK_IDS["water"]:
+	if item_id == Global.BRICK_IDS["water"]:
 		if not player.is_drowning:
 			start_drowning_sequence()
-	elif item_id == BRICK_IDS["lava"]:
+	elif item_id == Global.BRICK_IDS["lava"]:
 		player.get_hit(1)
 
 func respawn_player_on_cell(cell_id: Vector3i):

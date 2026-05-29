@@ -11,6 +11,27 @@ var final_collected_stars: int
 var final_total_stars: int
 var level_won := false
 
+const BRICK_IDS := {
+	"bricks_A": 0,
+	"bricks_B": 1,
+	"dirt": 2,
+	"dirt_with_grass": 3,
+	"grass": 4,
+	"lava": 5,
+	"metal": 6,
+	"sand_A": 7,
+	"sand_B": 8,
+	"sand_with_grass": 9,
+	"stone": 10,
+	"tree": 11,
+	"water": 12,
+	"wood": 13,
+}
+
+const DANGEROUS_BRICK_IDS := {
+	"lava": 5,
+	"water": 12
+}
 
 func fade_music_out() -> void:
 	var tween = create_tween()
